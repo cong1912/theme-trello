@@ -1,7 +1,8 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useState,useContext } from "react";
 import { Typography, InputBase } from "@material-ui/core";
 import {makeStyles} from '@material-ui/core/styles';
 import MoreHorizIcon from '@material-ui/icons/MoreHoriz';
+import StoreApi from './../../utils/storeApi';
 
 const useStyle = makeStyles((theme) =>({
     root: {
@@ -25,18 +26,33 @@ const useStyle = makeStyles((theme) =>({
         }
     }
 }))
-function Title({title}) {
-    const [open, setOpen] = useState(false);
+function Title({title,listId}) {
+  const [open, setOpen] = useState(false);
+  const [newTitle,setNewTitle] = useState(title);
+  const {updateListTitle}=useContext(StoreApi);
   const classes=useStyle();
+  const handleOnChange =(e)=>{
+    setNewTitle(e.target.value);
+  };
+  const handleOnBlur=()=>{
+    updateListTitle(newTitle,listId)
+    setOpen(!open);
+  };
   return (
     <div>
       {open ? (
         <div>
-          <InputBase autoFocus onBlur={()=>setOpen(!open)} fullWidth value={title} inputProps={{className:classes.input,}} />
+          <InputBase 
+          onChange={handleOnChange} 
+          autoFocus 
+          onBlur={handleOnBlur} 
+          fullWidth value={newTitle} 
+          inputProps={{className:classes.input,}} 
+          />
         </div>
       ) : (
         <div className={classes.edittableTitleContainer}>
-          <Typography className={classes.edittableTitle} onClick={()=>setOpen(!open)}>{title}</Typography>
+          <Typography className={classes.edittableTitle} onClick={()=>setOpen(!open)}>{newTitle}</Typography>
             <MoreHorizIcon/>
         </div>
       )}
