@@ -13,19 +13,18 @@ const useStyle = makeStyles((theme) =>({
         marginLeft:theme.spacing(1),
     }
 }))
-function List() {
+function List({list}) {
     const classes =useStyle();
     return (
         <div>
             <Paper className={classes.root}>
                 <CssBaseline/>
                 <Typography>
-                    <Title/>
-                    <Card/>
-                    <Card/>
-                    <Card/>
-                    <Card/>
-                    <InputContainer/>
+                    <Title title={list.title}/>
+                    {list.cards.map((card) =>(
+                        <Card key={card.id} card={card}  />
+                        ))}
+                    <InputContainer listId={list.id}/>
                 </Typography>
               
             </Paper>
